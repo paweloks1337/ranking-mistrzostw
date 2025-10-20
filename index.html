@@ -5,18 +5,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Topka Kuponów</title>
 <style>
-body{font-family:Arial;margin:20px;background:#f3f4f6;color:#111}
-h1{text-align:center;color:#111827}
-table{width:100%;border-collapse:collapse;margin-top:20px;}
-th,td{padding:10px;border-bottom:1px solid #ddd;text-align:left;}
-th{background:#f4f4f4;}
+body{
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #000; /* czarne tło */
+  color: #fff; /* biały tekst */
+}
+h1{
+  text-align: center;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.logo{
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  color: #FFD700; /* żółty napis */
+  margin-bottom: 20px;
+}
+table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th,td{
+  padding: 10px;
+  border-bottom: 1px solid #555;
+  text-align: left;
+  color: #fff; /* biały tekst w tabeli */
+}
+th{
+  background: #111;
+}
 .rank{width:50px;text-align:center;font-weight:700;}
 .points{width:100px;text-align:right;font-weight:700;}
 .center{text-align:center;}
 </style>
 </head>
 <body>
+
+<div class="logo">FORTUNA</div>
 <h1>🏆 Topka Kuponów (suma punktów)</h1>
+
 <table id="ranking">
 <thead>
 <tr>
@@ -32,3 +62,57 @@ th{background:#f4f4f4;}
 </table>
 
 <script>
+const CSV_URL = "https://docs.google.com/spreadsheets/d/1OGIxJ2nRr8gpOdvYyY0HG38SHe3XX2keDOZ4coQAJ-U/export?format=csv";
+
+async function loadRanking() {
+  const tbody = document.querySelector('#ranking tbody');
+  tbody.innerHTML = '<tr><td colspan="4" class="center">Ładowanie danych...</td></tr>';
+
+  try {
+    const response = await fetch(CSV_URL);
+    const text = await response.text();
+    const rows = text.trim().split('\n').slice(1); // pomijamy nagłówek
+
+    const scores = {};
+    rows.forEach(row => {
+      const cols = row.split(',');
+      const login = cols[0].trim();
+      const punkty = parseFloat(cols[2]) || 0;
+      if(scores[login]){
+        scores[login].punkty += punkty;
+        scores[login].kupony += 1;
+      } else {
+        scores[login] = {punkty: punkty, kupony: 1};
+      }
+    });
+
+    const result = Object.keys(scores).map(login => ({
+      login: login,
+      punkty: scores[login].punkty,
+      kupony: scores[login].kupony
+    })).sort((a,b)=>b.punkty - a.punkty);
+
+    tbody.innerHTML = '';
+    result.forEach((r,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="rank">${i+1}</td>
+        <td>${r.login}</td>
+        <td class="points">${r.punkty}</td>
+        <td class="center">${r.kupony}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="4" class="center">Błąd ładowania danych</td></tr>';
+    console.error(e);
+  }
+}
+
+loadRanking();
+setInterval(loadRanking, 60000);
+</script>
+
+</body>
+</html>
