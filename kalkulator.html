@@ -131,7 +131,7 @@ function oblicz() {
   wynikDiv.innerHTML = `
     🧮 Kurs: <b>${kurs.toFixed(2)}</b><br>
     💵 Wygrana: <b>${wygrana.toFixed(2)} PLN</b><br>
-    🏅 Punkty: <b>${punkty.toFixed(2)}</b>
+    🏅 Punkty: <b>${Math.round(punkty)}</b>
   `;
 }
 </script>
