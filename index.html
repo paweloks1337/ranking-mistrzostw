@@ -1,118 +1,274 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Ranking Mistrzostw Listopad 2025</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏆 Mistrzostwa Typowania 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-body{
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  background: #000; /* czarne tło */
-  color: #fff; /* biały tekst */
+:root {
+  --gold: #FFD700;
+  --black: #111;
+  --dark: #1a1a1a;
+  --green: #00FF88;
 }
-h1{
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(180deg, #000, #111 80%);
+  color: var(--gold);
+  margin: 0;
+  padding: 0;
   text-align: center;
-  color: #fff;
-  margin-bottom: 10px;
+  transition: background 0.5s, color 0.5s;
 }
-.logo{
-  text-align: center;
-  font-size: 32px;
-  font-weight: bold;
-  color: #FFD700; /* żółty napis */
-  margin-bottom: 20px;
+
+body.light-mode {
+  background: linear-gradient(180deg, #fff, #ddd);
+  color: #222;
 }
-table{
+
+nav {
+  background: linear-gradient(90deg, #000, #222);
+  padding: 15px 0;
+  box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+}
+
+nav a {
+  color: var(--gold);
+  text-decoration: none;
+  margin: 0 20px;
+  font-weight: 600;
+  font-size: 1.1em;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: white;
+  text-shadow: 0 0 10px var(--gold);
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: 0.3s;
+}
+.theme-toggle:hover {
+  background: var(--gold);
+  color: #000;
+}
+
+h1 {
+  margin-top: 30px;
+  font-size: 1.8em;
+}
+
+#loader {
+  margin: 40px auto;
+  font-size: 1.2em;
+}
+
+.container {
+  background: var(--dark);
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.show {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+body.light-mode .container {
+  background: white;
+  color: #000;
+}
+
+table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  font-size: 1em;
 }
-th,td{
+th, td {
   padding: 10px;
-  border-bottom: 1px solid #555;
-  text-align: left;
-  color: #fff; /* biały tekst w tabeli */
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
 }
-th{
-  background: #111;
+th {
+  color: var(--gold);
+  font-weight: 600;
+  text-transform: uppercase;
 }
-.rank{width:50px;text-align:center;font-weight:700;}
-.points{width:100px;text-align:right;font-weight:700;}
-.center{text-align:center;}
+td {
+  color: white;
+}
+td:nth-child(4) {
+  color: var(--green);
+  font-weight: bold;
+}
+body.light-mode td:nth-child(4) {
+  color: green;
+}
+
+input {
+  padding: 10px;
+  margin: 15px auto;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  background: #000;
+  color: var(--gold);
+  font-size: 1em;
+  width: 80%;
+  max-width: 300px;
+}
+input:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--gold);
+}
+body.light-mode input {
+  background: #fff;
+  color: #000;
+}
+
+footer {
+  margin-top: 40px;
+  padding: 15px;
+  font-size: 0.9em;
+  color: #aaa;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  th, td {
+    padding: 6px;
+    font-size: 0.9em;
+  }
+  h1 { font-size: 1.4em; }
+  nav a { margin: 0 10px; font-size: 0.9em; }
+}
 </style>
 </head>
 <body>
 
-<div class="logo">FORTUNA</div>
-<h1>🏆 Topka Kuponów (suma punktów)</h1>
+<nav>
+  <a href="index.html">🏆 Ranking</a>
+  <a href="kalkulator.html">📊 Kalkulator</a>
+</nav>
 
-<table id="ranking">
-<thead>
-<tr>
-<th class="rank">#</th>
-<th>Login</th>
-<th>Punkty</th>
-<th>Liczba kuponów</th>
-</tr>
-</thead>
-<tbody>
-<tr><td colspan="4" class="center">Ładowanie danych...</td></tr>
-</tbody>
-</table>
+<button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+
+<h1>🏆 Mistrzostwa Typowania 2025</h1>
+<input type="text" id="search" placeholder="🔍 Szukaj nicku...">
+<div id="loader">⏳ Wczytywanie danych...</div>
+
+<div class="container" id="ranking-box" style="display:none;">
+  <table id="rankingTable">
+    <thead>
+      <tr><th>Miejsce</th><th>Nick</th><th>Kupony</th><th>Punkty</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<footer>© 2025 Mistrzostwa Discorda | Stworzone przez Pawła ⚽</footer>
 
 <script>
-const CSV_URL = "https://docs.google.com/spreadsheets/d/1OGIxJ2nRr8gpOdvYyY0HG38SHe3XX2keDOZ4coQAJ-U/export?format=csv";
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTThQFcv-8JkvXEePVWkQw7yoEJX9XcZDFCChCWL_JmzgLQItyNW5qmp2eUKxD6a5Wp--sfWzFes_Cj/pub?output=csv";
+
+function animateValue(element, start, end, duration) {
+  const range = end - start;
+  let startTime = null;
+  function step(currentTime) {
+    if (!startTime) startTime = currentTime;
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+    element.textContent = Math.floor(progress * range + start);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
 
 async function loadRanking() {
-  const tbody = document.querySelector('#ranking tbody');
-  tbody.innerHTML = '<tr><td colspan="4" class="center">Ładowanie danych...</td></tr>';
+  const loader = document.getElementById("loader");
+  const box = document.getElementById("ranking-box");
+  const tableBody = document.querySelector("#rankingTable tbody");
 
   try {
-    const response = await fetch(CSV_URL);
-    const text = await response.text();
-    const rows = text.trim().split('\n').slice(1); // pomijamy nagłówek
+    const res = await fetch(CSV_URL);
+    const text = await res.text();
+    const separator = text.includes(";") ? ";" : ",";
+    const rows = text.trim().split("\n").map(r => r.split(separator));
 
-    const scores = {};
-    rows.forEach(row => {
-      const cols = row.split(',');
-      const login = cols[0].trim();
-      const punkty = parseFloat(cols[2]) || 0;
-      if(scores[login]){
-        scores[login].punkty += punkty;
-        scores[login].kupony += 1;
-      } else {
-        scores[login] = {punkty: punkty, kupony: 1};
-      }
+    const header = rows[0].map(h => h.trim().toLowerCase());
+    const nickCol = header.findIndex(h => h.includes("nick"));
+    const punktyCol = header.findIndex(h => h.includes("punkt"));
+
+    const ranking = {};
+    rows.slice(1).forEach(row => {
+      const nick = row[nickCol]?.trim();
+      const punkty = parseFloat(row[punktyCol]?.replace(",", "."));
+      if (!nick || isNaN(punkty)) return;
+      if (!ranking[nick]) ranking[nick] = { kupony: 0, punkty: 0 };
+      ranking[nick].kupony++;
+      ranking[nick].punkty += punkty;
     });
 
-    const result = Object.keys(scores).map(login => ({
-      login: login,
-      punkty: scores[login].punkty,
-      kupony: scores[login].kupony
-    })).sort((a,b)=>b.punkty - a.punkty);
+    const sorted = Object.entries(ranking).sort((a, b) => b[1].punkty - a[1].punkty);
 
-    tbody.innerHTML = '';
-    result.forEach((r,i)=>{
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="rank">${i+1}</td>
-        <td>${r.login}</td>
-        <td class="points">${r.punkty}</td>
-        <td class="center">${r.kupony}</td>
-      `;
-      tbody.appendChild(tr);
+    tableBody.innerHTML = "";
+    sorted.forEach(([nick, data], i) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${nick}</td>
+        <td>${data.kupony}</td>
+        <td class="animated">${0}</td>`;
+      tableBody.appendChild(row);
+
+      // animacja punktów
+      setTimeout(() => {
+        const td = row.querySelector(".animated");
+        animateValue(td, 0, Math.round(data.punkty), 1200);
+      }, i * 100);
     });
 
-  } catch(e) {
-    tbody.innerHTML = '<tr><td colspan="4" class="center">Błąd ładowania danych</td></tr>';
-    console.error(e);
+    loader.style.display = "none";
+    box.style.display = "block";
+    box.classList.add("show");
+
+  } catch (err) {
+    loader.textContent = "❌ Błąd podczas ładowania danych";
   }
 }
 
-loadRanking();
-setInterval(loadRanking, 60000);
-</script>
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+  const btn = document.querySelector(".theme-toggle");
+  btn.textContent = document.body.classList.contains("light-mode") ? "🌙" : "☀️";
+}
 
+document.getElementById("search").addEventListener("input", (e) => {
+  const term = e.target.value.toLowerCase();
+  document.querySelectorAll("#rankingTable tbody tr").forEach(tr => {
+    const nick = tr.children[1].textContent.toLowerCase();
+    tr.style.display = nick.includes(term) ? "" : "none";
+  });
+});
+
+window.addEventListener("load", loadRanking);
+</script>
 </body>
 </html>
